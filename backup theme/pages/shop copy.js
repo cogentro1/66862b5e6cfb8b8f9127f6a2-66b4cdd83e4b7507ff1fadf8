@@ -1,0 +1,608 @@
+{
+  /* <script>
+    $(function () {
+        // alert("Alert")
+        // Select the pagination container
+        var $pagination = $('.pagination');
+        var $sorting = $('.sorting');
+        var $showing = $('.showing');
+        // Select the items container
+        var $items = $('.items');
+        // Set the number of items per page
+        var itemsPerPage = 10;
+        // Set the active page
+        var activePage = 1;
+        var priceFilter = []
+        var filters = {}; // Initialize an object to store selected filters
+
+        // Show the appropriate items for the active page
+        showItems();
+
+        // Add event handlers for the pagination controls
+        $pagination.on('click', '.page-link', function (e) {
+            e.preventDefault();
+
+            var $link = $(this);
+            if ($link.parent().hasClass('prev')) {
+                console.log("PREVIOUS CLICKED", activePage)
+                // Handle previous button
+                if (activePage > 1) {
+                    activePage--;
+                    showItems();
+                }
+            } else if ($link.parent().hasClass('next')) {
+                console.log("Next CLICKED", activePage)
+
+                // Handle next button
+                if (activePage < numPages()) {
+                    activePage++;
+                    showItems();
+                }
+            } else if ($link.parent().hasClass('page')) {
+                console.log("Page No CLICKED", activePage)
+
+                // Handle page number button
+                activePage = $link.text();
+                showItems();
+            }
+        });
+
+        $sorting.on('click', '.dropdown-item', function (e) {
+            e.preventDefault();
+
+            var $link = $(this);
+            console.log("$link.text()", $link.text())
+            if ($link.text() == "Latest") {
+                console.log("Latest CLICKED")
+                // Handle previous button
+                $sorting.find('.dropdown-item').removeClass('active');
+                $link.addClass('active');
+            } else if ($link.text() == "Popularity") {
+                console.log("Popularity CLICKED")
+                $sorting.find('.dropdown-item').removeClass('active');
+                $link.addClass('active');
+
+            } else if ($link.text() == "Best Rating") {
+                console.log("Rating CLICKED")
+                $sorting.find('.dropdown-item').removeClass('active');
+                $link.addClass('active');
+            }
+        });
+
+        $showing.on('click', '.dropdown-item', function (e) {
+            e.preventDefault();
+
+            var $link = $(this);
+            console.log("$link", $link)
+            console.log("$link.text()", $link.text())
+            if ($link.text() == "10") {
+                console.log("10 CLICKED")
+                if (itemsPerPage != 10) {
+                    itemsPerPage = 10
+                    console.log("true not 10")
+                    getProducts({
+                        page: activePage,
+                        pageSize: itemsPerPage
+                    }, function () {
+                        console.log("Callback")
+                        $showing.find('.dropdown-item').removeClass('active');
+                        $link.addClass('active');
+                    })
+                    // Get the filter value
+                    var filterValue = $link.text().toLowerCase();
+                    console.log('filterValue is ', filterValue)
+                    // Update the URL with the filter parameter
+                    var newUrl = updateUrlParameter(window.location.href, "pg", filterValue);
+                    history.pushState(null, null, newUrl);
+                    // Apply the filters on updated url
+                    applyFilters();
+                    // applyFilters($link);
+                }
+            }
+            else if ($link.text() == "20") {
+                console.log("20 CLICKED")
+                if (itemsPerPage != 20) {
+                    itemsPerPage = 20
+                    console.log("true not 20")
+                    getProducts({
+                        page: activePage,
+                        pageSize: itemsPerPage
+                    }, function () {
+                        console.log("Callback")
+                        $showing.find('.dropdown-item').removeClass('active');
+                        $link.addClass('active');
+                    })
+                    // Get the filter value
+                    var filterValue = $link.text().toLowerCase();
+                    console.log('filterValue is ', filterValue)
+                    // Update the URL with the filter parameter
+                    var newUrl = updateUrlParameter(window.location.href, "pg", filterValue);
+                    history.pushState(null, null, newUrl);
+                    // Apply the filters on updated url
+                    applyFilters();
+                }
+            }
+            else if ($link.text() == "30") {
+                console.log("30")
+                if (itemsPerPage != 30) {
+                    itemsPerPage = 30
+                    console.log("true not 30")
+                    getProducts({
+                        page: activePage,
+                        pageSize: itemsPerPage
+                    }, function () {
+                        console.log("Callback")
+                        $showing.find('.dropdown-item').removeClass('active');
+                        $link.addClass('active');
+                    })
+                    // Get the filter value
+                    var filterValue = $link.text().toLowerCase();
+                    console.log('filterValue is ', filterValue)
+                    // Update the URL with the filter parameter
+                    var newUrl = updateUrlParameter(window.location.href, "pg", filterValue);
+                    history.pushState(null, null, newUrl);
+                    // Apply the filters on updated url
+                    applyFilters();
+                }
+            }
+        });
+
+        // Apply filters on page load
+        applyCheckBoxFiltersFromUrl();
+        // Function to apply filters based on URL parameters
+        function applyCheckBoxFiltersFromUrl() {
+            // Get the filter values from the URL
+            var urlParams = new URLSearchParams(window.location.search);
+            var filterValues = urlParams.get("filter");
+
+            if (filterValues) {
+                // Split the filter values by comma and store them in an array
+                var selectedFilters = filterValues.split(",");
+                console.log('selectedFilters', selectedFilters)
+                // Loop through the selectedFilters array and check the corresponding checkboxes
+                selectedFilters.forEach(function (filter) {
+                    $('#' + filter).prop('checked', true);
+                    console.log('filter inside selected filters', filter)
+                    priceFilter = filter
+                    getProducts({
+                        page: activePage,
+                        pageSize: itemsPerPage
+                    }, function () {
+                        console.log("Callback")
+                    })
+                });
+
+                // Apply the filters on the updated URL
+                applyFilters();
+            }
+        }
+
+        // function applyFilters() {
+        //     // var $link = $(this);
+        //     // var $link = "a.dropdown-item.active"
+        //     // Get the filter value from the URL
+        //     var urlParams = new URLSearchParams(window.location.search);
+        //     var filterValue = urlParams.get("pg");
+        //     console.log("Filter applied:", filterValue);
+        //     if (filterValue) {
+        //         var selectedValues = filterValue.split(",");
+        //         console.log("Filters applied:", selectedValues);
+        //         // Apply the filter value if it exists
+        //         if (filterValue == "10") {
+        //             console.log("Filter applied:", filterValue);
+        //             itemsPerPage = 10
+        //             console.log("true not 10")
+        //             getProducts({
+        //                 page: activePage,
+        //                 pageSize: itemsPerPage
+        //             }, function () {
+        //                 console.log("Callback")
+        //                 // Remove 'active' class from all the "Showing" options
+        //                 $showing.find('.dropdown-item').removeClass('active');
+
+        //                 // Add 'active' class to the selected "Showing" option
+        //                 var $activeOption = $showing.find('.dropdown-item').filter(function () {
+        //                     return $(this).text() === filterValue;
+        //                 });
+        //                 $activeOption.addClass('active');
+        //             })
+        //             console.log("Filter applied:", filterValue);
+
+        //         }
+        //         // Apply the filter value if it exists
+        //         else if (filterValue == "20") {
+        //             console.log("Filter applied:", filterValue);
+        //             // Apply the filter logic based on the filterValue
+        //             // if ($link.text() == "20") {
+        //             console.log("20 CLICKED")
+        //             if (itemsPerPage != 20) {
+        //                 itemsPerPage = 20
+        //                 console.log("true not 20")
+        //                 getProducts({
+        //                     page: activePage,
+        //                     pageSize: itemsPerPage
+        //                 }, function () {
+        //                     console.log("Callback")
+        //                     // Remove 'active' class from all the "Showing" options
+        //                     $showing.find('.dropdown-item').removeClass('active');
+
+        //                     // Add 'active' class to the selected "Showing" option
+        //                     var $activeOption = $showing.find('.dropdown-item').filter(function () {
+        //                         return $(this).text() === filterValue;
+        //                     });
+        //                     $activeOption.addClass('active');
+        //                 })
+
+        //             }
+        //             console.log("Filter applied:", filterValue);
+
+        //         }
+        //         else if (filterValue == "30") {
+        //             console.log("Filter applied:", filterValue);
+        //             console.log("30")
+        //             if (itemsPerPage != 30) {
+        //                 itemsPerPage = 30
+        //                 console.log("true not 30")
+        //                 getProducts({
+        //                     page: activePage,
+        //                     pageSize: itemsPerPage
+        //                 }, function () {
+        //                     console.log("Callback")
+        //                     // Remove 'active' class from all the "Showing" options
+        //                     $showing.find('.dropdown-item').removeClass('active');
+
+        //                     // Add 'active' class to the selected "Showing" option
+        //                     var $activeOption = $showing.find('.dropdown-item').filter(function () {
+        //                         return $(this).text() === filterValue;
+        //                     });
+        //                     $activeOption.addClass('active');
+        //                 })
+        //                 console.log("Filter applied:", filterValue);
+        //             }
+        //         }
+        //     }
+        // }
+        // function applyFilters() {
+        //     // var $link = $(this);
+        //     // var $link = "a.dropdown-item.active"
+        //     // Get the filter value from the URL
+        //     var urlParams = new URLSearchParams(window.location.search);
+        //     var filterValue = urlParams.get("pg");
+        //     console.log("Filter applied:", filterValue);
+
+        //     // Apply the filter value if it exists
+        //     if (filterValue == "10") {
+        //         console.log("Filter applied:", filterValue);
+        //         itemsPerPage = 10
+        //         console.log("true not 10")
+        //         getProducts({
+        //             page: activePage,
+        //             pageSize: itemsPerPage
+        //         }, function () {
+        //             console.log("Callback")
+        //             $showing.find('.dropdown-item').removeClass('active');
+        //             $link.addClass('active');
+        //         })
+        //         console.log("Filter applied:", filterValue);
+
+        //     }
+        //     // Apply the filter value if it exists
+        //     else if (filterValue == "20") {
+        //         console.log("Filter applied:", filterValue);
+        //         // Apply the filter logic based on the filterValue
+        //         // if ($link.text() == "20") {
+        //         console.log("20 CLICKED")
+        //         if (itemsPerPage != 20) {
+        //             itemsPerPage = 20
+        //             console.log("true not 20")
+        //             getProducts({
+        //                 page: activePage,
+        //                 pageSize: itemsPerPage
+        //             }, function () {
+        //                 console.log("Callback")
+        //                 $showing.find('.dropdown-item').removeClass('active');
+        //                 $link.addClass('active');
+        //             })
+
+        //         }
+        //         console.log("Filter applied:", filterValue);
+
+        //     }
+        //     else if (filterValue == "30") {
+        //         console.log("Filter applied:", filterValue);
+        //         console.log("30")
+        //         if (itemsPerPage != 30) {
+        //             itemsPerPage = 30
+        //             console.log("true not 30")
+        //             getProducts({
+        //                 page: activePage,
+        //                 pageSize: itemsPerPage
+        //             }, function () {
+        //                 console.log("Callback")
+        //                 $showing.find('.dropdown-item').removeClass('active');
+        //                 $link.addClass('active');
+        //             })
+        //             console.log("Filter applied:", filterValue);
+        //         }
+        //     }
+        // }
+
+        // applyFilters()
+
+        // apply checkbox
+
+        $(':checkbox').click(function () {
+            // Your code here
+            if ($(this).prop('checked')) {
+                console.log('Checkbox is checked', priceFilter);
+                var checkboxValue = $(this).val();
+                // var checkboxId = $(this).attr('id');
+                console.log("checkboxValue: ", checkboxValue)
+                // console.log("checkboxId: ",checkboxValue)
+                priceFilter.push(checkboxValue)
+                console.log('Checkbox is checked 2', priceFilter);
+                getProducts({
+                    page: activePage,
+                    pageSize: itemsPerPage
+                }, function () {
+                    console.log("Callback")
+                })
+                // Get the filter value
+                // var filterValue = $link.text().toLowerCase();
+                console.log('filterValue is ', checkboxValue)
+                // Update the URL with the filter parameter
+                var newUrl = updateUrlParameter(window.location.href, "filter", priceFilter.join(","));
+                history.pushState(null, null, newUrl);
+                // Apply the filters on updated url
+                // applyFilters();
+            } else {
+                console.log('Checkbox is unchecked', priceFilter);
+                var checkboxValue = $(this).val();
+                var checkboxId = $(this).attr('id');
+                console.log("checkboxValue: ", checkboxValue)
+                console.log("checkboxId: ", checkboxId)
+                priceFilter = priceFilter.filter(item => item !== checkboxValue)
+                console.log('Checkbox is unchecked 2', priceFilter);
+                getProducts({
+                    page: activePage,
+                    pageSize: itemsPerPage
+                }, function () {
+                    console.log("Callback")
+                })
+            }
+
+        });
+
+        // Show the appropriate items for the active page
+        async function showItems() {
+            // Hide all the items
+            $items.find('.item').removeClass('active');
+
+            getProducts({
+                page: activePage,
+                pageSize: itemsPerPage,
+            }, function (data) {
+                updatePagination(data)
+            })
+            // Calculate the start and end indices for the items on the active page
+            // var startIndex = (activePage - 1) * itemsPerPage;
+            // var endIndex = startIndex + itemsPerPage - 1;
+
+            // // Show the items for the active page
+            // $items.find('.item').slice(startIndex, endIndex + 1).addClass('active');
+        }
+
+        function updatePagination(data) {
+            console.log("DATA: ", data)
+            // // Update the pagination controls
+            $pagination.find('.page').removeClass('active');
+            $pagination.find('.page').eq(activePage - 1).addClass('active');
+            $pagination.find('.prev').toggleClass('disabled', activePage == 1);
+            $pagination.find('.next').toggleClass('disabled', activePage == data?.total);
+        }
+
+        function getProducts({ page, pageSize }, callback) {
+            const url = `/getProducts`
+            const data = {
+                page: activePage,
+                pageSize: itemsPerPage,
+                priceFilter
+            }
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (response) {
+                    console.log("RESPONSE: ", response)
+                    var $elements = $('.col-lg-4');
+                    // Remove the elements
+                    $elements.remove();
+
+                    console.log("NExt")
+
+                    var $div = $('.filters').first();
+                    let products = response.data.reverse()
+                    for (let i = 0; i < products.length; i++) {
+                        let product = products[i]
+                        $div.after(`<div class="col-lg-4 col-md-6 col-sm-6 pb-1" id="singleproduct">
+                <div class="product-item bg-light mb-4">
+                    <div class="product-img position-relative overflow-hidden">
+                        <img class="img-fluid w-100" src=${product?.featuredImage} alt="">
+                        <div class="product-action">
+                            <a class="btn btn-outline-dark btn-square" href=""><i
+                                    class="fa fa-shopping-cart"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href=""><i
+                                    class="fa fa-sync-alt"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="text-center py-4">
+                        <a class="h6 text-decoration-none text-truncate" href="/product/${product?._id}">${product?.name}</a>
+                        <div class="d-flex align-items-center justify-content-center mt-2">
+                            <h5>$${product?.price}</h5>
+                            <h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center mb-1">
+                            <small class="fa fa-star text-primary mr-1"></small>
+                            <small class="fa fa-star text-primary mr-1"></small>
+                            <small class="fa fa-star text-primary mr-1"></small>
+                            <small class="fa fa-star text-primary mr-1"></small>
+                            <small class="fa fa-star text-primary mr-1"></small>
+                            <small>(99)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>`);
+                    }
+
+                    callback(response)
+                },
+                error: function (err) {
+                    console.log("err: ", err.responseText)
+                }
+            });
+
+        }
+
+        // Function to update URL parameters
+        function updateUrlParameter(url, param, paramValue) {
+            console.log('hello updateUrlParameter')
+            var pattern = new RegExp("(\\?|&)" + param + "=[^&]*");
+            if (url.match(pattern)) {
+                return url.replace(pattern, "$1" + param + "=" + paramValue);
+            }
+            else {
+                if (url.indexOf("?") === -1) {
+                    return url + "?" + param + "=" + paramValue;
+                }
+                else {
+                    return url + "&" + param + "=" + paramValue;
+                }
+            }
+        }
+
+        // Return the number of pages
+        function numPages() {
+            return 10
+        }
+    });
+
+
+</script>
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="#">Home</a>
+                <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                <span class="breadcrumb-item active">Shop List</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <!-- Shop Sidebar Start -->
+        <div class="col-lg-3 col-md-4">
+            <!-- Price Start -->
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter
+                    by price</span></h5>
+            <div class="bg-light p-4 mb-30">
+                <form>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" checked id="price-all" value="price-all">
+                        <label class="custom-control-label" for="price-all">All Price</label>
+                        <span class="badge border font-weight-normal">1000</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="price-1" value="price-1">
+                        <label class="custom-control-label" for="price-1">$1 - $200</label>
+                        <span class="badge border font-weight-normal">150</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="price-2" value="price-2">
+                        <label class="custom-control-label" for="price-2">$200 - $400</label>
+                        <span class="badge border font-weight-normal">295</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="price-3" value="price-3">
+                        <label class="custom-control-label" for="price-3">$400 - $600</label>
+                        <span class="badge border font-weight-normal">246</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="price-4" value="price-4">
+                        <label class="custom-control-label" for="price-4">$600 - $800</label>
+                        <span class="badge border font-weight-normal">145</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                        <input type="checkbox" class="custom-control-input" id="price-5" value="price-5">
+                        <label class="custom-control-label" for="price-5">$800 - $1000</label>
+                        <span class="badge border font-weight-normal">168</span>
+                    </div>
+                </form>
+            </div>
+            <!-- Price End -->
+        </div>
+        <!-- Shop Sidebar End -->
+
+
+        <!-- Shop Product Start -->
+        <div class="col-lg-9 col-md-8">
+            <div class="row pb-3">
+                <div class="col-12 pb-1 filters">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div>
+                            <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
+                            <!-- <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button> -->
+                        </div>
+                        <div class="ml-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle"
+                                    data-toggle="dropdown">Sorting</button>
+                                <div class="sorting dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item active" href="#">Latest</a>
+                                    <a class="dropdown-item" href="#">Popularity</a>
+                                    <a class="dropdown-item" href="#">Best Rating</a>
+                                </div>
+                            </div>
+                            <div class="btn-group ml-2">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle"
+                                    data-toggle="dropdown">Showing</button>
+                                <div class="showing dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item active" href="#">10</a>
+                                    <a class="dropdown-item" href="#">20</a>
+                                    <a class="dropdown-item" href="#">30</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products goes here -->
+
+                <div class="col-12">
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item prev"><a class="page-link" prev href="#">Previous</span></a></li>
+                            <li class="page-item page active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item page"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item page"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item next"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Shop Product End -->
+    </div>
+</div>
+<!-- Shop End -->
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a> */
+}

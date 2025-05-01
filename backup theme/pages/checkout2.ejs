@@ -1,0 +1,199 @@
+<style>
+    #autocomplete {
+        width: 100%;
+        height: 40px;
+        margin: 10px 0;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    #map {
+        height: 300px;
+        width: 100%;
+    }
+
+    .container {
+        margin: 10px;
+    }
+
+    .grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .grid-item {
+        flex: 1 1 calc(50% - 10px);
+        min-width: calc(50% - 10px);
+    }
+
+    .full-width {
+        flex: 1 1 100%;
+    }
+
+    .input-field {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .input-field[disabled] {
+        background-color: #f0f0f0;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+<div>
+
+    <input id="autocomplete" type="text" placeholder="Enter a location">
+    <div id="map"></div>
+    <div class="container">
+        <div class="grid">
+            <div class="grid-item">
+                <input id="name" class="input-field" type="text" placeholder="Name" disabled>
+            </div>
+            <div class="grid-item">
+                <input id="addressLine1" class="input-field" type="text" placeholder="Address Line 1" disabled>
+            </div>
+            <div class="grid-item">
+                <input id="city" class="input-field" type="text" placeholder="City" disabled>
+            </div>
+            <div class="grid-item">
+                <input id="state" class="input-field" type="text" placeholder="State" disabled>
+            </div>
+            <div class="grid-item">
+                <input id="country" class="input-field" type="text" placeholder="Country" disabled>
+            </div>
+            <div class="grid-item">
+                <input id="zipcode" class="input-field" type="text" placeholder="Zip Code (Optional)">
+            </div>
+            <div class="grid-item">
+                <input id="placeId" class="input-field" type="text" placeholder="Place ID" disabled>
+            </div>
+            <div class="full-width">
+                <button onclick="handleSubmit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    let map, marker, autocomplete;
+
+    async function fetchRecord() {
+        // Simulate fetching data from an API
+        return {
+            addressLine1: '1600 Amphitheatre Parkway',
+            city: 'Mountain View',
+            state: 'CA',
+            country: 'United States',
+            latitude: 37.42216,
+            longitude: -122.08427,
+            zipcode: '94043',
+            placeId: 'ChIJ2eUgeAK6j4ARbn5u_wAGqWA'
+        };
+    }
+
+    function initMap() {
+        fetchRecord().then(response => {
+            const position = {
+                lat: parseFloat(response.latitude) || 30.3753,
+                lng: parseFloat(response.longitude) || 69.3451,
+            };
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: position,
+                zoom: response.longitude && response.latitude ? 20 : 4,
+            });
+
+            marker = new google.maps.Marker({
+                map: map,
+                position: position,
+            });
+
+            autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), { types: ['establishment'] });
+
+            autocomplete.addListener('place_changed', () => {
+                const place = autocomplete.getPlace();
+
+                if (!place.geometry) {
+                    document.getElementById('name').value = `No details available for input: '${place.name}'`;
+                    document.getElementById('addressLine1').value = '';
+                    document.getElementById('city').value = '';
+                    document.getElementById('state').value = '';
+                    document.getElementById('country').value = '';
+                    document.getElementById('zipcode').value = '';
+                    document.getElementById('placeId').value = '';
+                    return;
+                }
+
+                map.setCenter(place.geometry.location);
+                map.setZoom(15);
+
+                let city = '';
+                let state = '';
+                let country = '';
+
+                for (const component of place.address_components) {
+                    if (component.types.includes('locality')) {
+                        city = component.long_name;
+                    }
+                    if (component.types.includes('administrative_area_level_1')) {
+                        state = component.short_name;
+                    }
+                    if (component.types.includes('country')) {
+                        country = component.long_name;
+                    }
+                }
+
+                document.getElementById('name').value = place.name;
+                document.getElementById('addressLine1').value = place.formatted_address;
+                document.getElementById('city').value = city;
+                document.getElementById('state').value = state;
+                document.getElementById('country').value = country;
+                document.getElementById('zipcode').value = ''; // Reset zipcode for user input
+                document.getElementById('placeId').value = place.place_id;
+                marker.setPosition(place.geometry.location);
+                marker.setVisible(true);
+            });
+
+            document.getElementById('name').value = response.addressLine1;
+            document.getElementById('addressLine1').value = response.addressLine1;
+            document.getElementById('city').value = response.city;
+            document.getElementById('state').value = response.state;
+            document.getElementById('country').value = response.country;
+            document.getElementById('zipcode').value = response.zipcode;
+            document.getElementById('placeId').value = response.placeId;
+        });
+    }
+
+    function handleSubmit() {
+        const data = {
+            addressLine1: document.getElementById('addressLine1').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            country: document.getElementById('country').value,
+            latitude: marker.getPosition().lat(),
+            longitude: marker.getPosition().lng(),
+            placeId: autocomplete.getPlace().place_id,
+            zipcode: document.getElementById('zipcode').value,
+        };
+
+        console.log('Saving data:', data);
+        alert('Location saved successfully');
+    }
+
+    function loadScript() {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBxlCPMKTJnAEuy43rjvfhkZ8twF0Wumdo&libraries=places&callback=initMap`;
+        script.async = true;
+        document.head.appendChild(script);
+    }
+
+    loadScript();
+</script>

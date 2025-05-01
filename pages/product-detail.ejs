@@ -1,0 +1,455 @@
+
+        <!-- mobile fix menu end -->
+
+        <!-- Breadcrumb Section Start -->
+        <section class="breadcrumb-section pt-0">
+            <div class="container-fluid-lg">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-contain">
+                            <h2><%= product.name%></h2>
+                            <nav>
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="index.html">
+                                            <i class="fa-solid fa-house"></i>
+                                        </a>
+                                    </li>
+
+                                    <li class="breadcrumb-item active"><%= product.name%></li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Breadcrumb Section End -->
+
+        <!-- Product Left Sidebar Start -->
+        <section class="product-section">
+            <div class="container-fluid-lg">
+                <div class="row">
+                    <div class="col-xxl-9 col-xl-8 col-lg-7 wow fadeInUp">
+                        <div class="row g-4">
+                            <div class="col-xl-6 wow fadeInUp">
+                                <div class="product-left-box">
+                                    <div class="row g-sm-4 g-2">
+                                        <div class="col-12">
+                                            <div class="product-main no-arrow">
+                                                <div>
+                                                    <div class="slider-image">
+                                                        <img src="<%= product.featuredImage.fileSrc%>" id="img-1"
+                                                            data-zoom-image="/images/fashion/product/23.jpg" class="
+                                                            img-fluid image_zoom_cls-0 blur-up lazyload" alt="">
+                                                    </div>
+                                                </div>
+
+                                                
+                                            </div>
+                                        </div>
+
+                                    
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 wow fadeInUp">
+                                <div class="right-box-contain">
+                                
+                                    <h2 class="name"><%= product.name %></h2>
+                                    
+                                    <div class="price-rating">
+                                        <h3 id="product-price" class="theme-color"><%= product.variants[0].salePrice %> £ </h3>
+                                        <div class="product-rating custom-rate">
+                                            <ul class="rating">
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                                <li>
+                                                    <i data-feather="star"></i>
+                                                </li>
+                                            </ul>
+                                            <span class="review">23 Customer Review</span>
+                                        </div>
+                                    </div>
+                                    <% if (product.variants.length > 0) { %>
+                                        <span id="variant-display"><%=product.variants[0].attributes%></span>
+                                    <% } %>
+                                    <div class="product-title">
+                                        <h4>Product Information</h4>
+                                    </div>
+                                    <div class="product-contain">
+                                        <p class="w-100"><%= product.shortDescription%></p>
+                                    </div>
+                                    
+                
+
+
+                                    <div class="note-box product-package">
+                                        <div class="cart_qty qty-box product-qty">
+                                            <div class="input-group">
+                                                <button type="button" class="qty-left-minus" data-type="minus"
+                                                    data-field="">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                                <input class="form-control input-number qty-input" type="text"
+                                                    name="quantity" value="1">
+                                                <button type="button" class="qty-right-plus" data-type="plus" data-field="">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <button 
+                                            id="add-to-cart" class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</button>
+                                    </div>
+                                    <div class="product-package">
+                                
+
+                                        <div class="product-title">
+                                            <% if (product.variants.length > 1) { %>
+                                                <h2>Variants</h2>
+                                            <% } else { %>
+                                                <h2>No Variants</h2>
+                                            <% } %>
+                                                                  </div>
+
+                                        <ul class="image select-package">
+                                            <% if (product.variants.length > 0) { %>
+                                                <% product.variants.forEach(function(variant, index) { %>
+                                                    <li class="form-check">
+                                                        <input class="form-check-input variant-selector" type="radio" 
+                                                               name="variant" 
+                                                               id="variant-<%= index %>" 
+                                                               data-price="<%= variant.salePrice %>"
+                                                               data-attributes="<%= variant.attributes %>"
+                                                               <% if (index === 0) { %>checked<% } %>>
+                                                        <label class="form-check-label" for="variant-<%= index %>">
+                                                            <%= variant.attributes %> <!-- Adjust based on actual attribute -->
+                                                        </label>
+                                                    </li>
+                                                <% }); %>
+                                            <% } %>
+                                        </ul>
+                                </div>
+                            
+
+                                    <div class="pickup-box">
+                                        <div class="product-title">
+                                            <h4>Store Information</h4>
+                                        </div>
+
+                                        <div class="pickup-detail">
+                                            <h4 class="text-content w-100">I would like the people that buy my clothes to
+                                                understand that for me it's one small piece of art. I love the 2000s because
+                                                everyone started to love haute couture. The only way to do something in
+                                                depth is to work hard.</h4>
+                                        </div>
+
+                                        <div class="product-info">
+                                            <ul class="product-info-list product-info-list-2">
+                                                <li>Type : <a href="javascript:void(0)"><%= product.category.name%></a></li>
+                                            
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="payment-option">
+                                        <div class="product-title">
+                                            <h4>Guaranteed Safe Checkout</h4>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <img src="/images/product/payment/1.svg"
+                                                        class="blur-up lazyload" alt="">
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <img src="/images/product/payment/2.svg"
+                                                        class="blur-up lazyload" alt="">
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <img src="/images/product/payment/3.svg"
+                                                        class="blur-up lazyload" alt="">
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <img src="/images/product/payment/4.svg"
+                                                        class="blur-up lazyload" alt="">
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <img src="/images/product/payment/5.svg"
+                                                        class="blur-up lazyload" alt="">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-3 col-xl-4 col-lg-5 d-none d-lg-block wow fadeInUp">
+                        <div class="right-sidebar-box">
+                            <div class="vendor-box">
+                                <div class="vendor-contain">
+                                    <div class="vendor-image">
+                                        <img src="/images/product/vendor.png" class="blur-up lazyload" alt="">
+                                    </div>
+
+                                    <div class="vendor-name">
+                                        <h5 class="fw-500">Noodles Co.</h5>
+
+                                        <div class="product-rating mt-1">
+                                            <ul class="rating">
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                                <li>
+                                                    <i data-feather="star"></i>
+                                                </li>
+                                            </ul>
+                                            <span>(36 Reviews)</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <p class="vendor-detail">Noodles & Company is an American fast-casual
+                                    restaurant that offers international and American noodle dishes and pasta.</p>
+
+                                <div class="vendor-list">
+                                    <ul>
+                                        <li>
+                                            <div class="address-contact">
+                                                <i data-feather="map-pin"></i>
+                                                <h5>Address: <span class="text-content">1288 Franklin Avenue</span></h5>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div class="address-contact">
+                                                <i data-feather="headphones"></i>
+                                                <h5>Contact Seller: <span class="text-content">(+1)-123-456-789</span></h5>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="pt-25">
+                                <div class="hot-line-number">
+                                    <h5>Hotline Order:</h5>
+                                    <h6>Mon - Fri: 07:00 am - 08:30PM</h6>
+                                    <h3>(+1) 123 456 789</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Product Left Sidebar End -->
+
+    
+
+        <!-- Related Product Section Start -->
+        <section class="product-list-section section-b-space">
+            <div class="container-fluid-lg">
+                <div class="title">
+                    <h2>Related Products</h2>
+                    <span class="title-leaf">
+                        <svg class="icon-width">
+                            <use xlink:href="/svg/leaf.svg#leaf"></use>
+                        </svg>
+                    </span>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="slider-6_1 product-wrapper">
+                            <% if (relatedProducts && relatedProducts.length > 0) { %>
+                                <% relatedProducts.forEach(function(related) { %>
+                                    <div> <!-- Slider requires individual divs for each slide -->
+                                        <div class="product-box-3 wow fadeInUp h-100">
+                                            <div class="product-header">
+                                                <div class="product-image">
+                                                    <a href="/product/<%= related._id %>">
+                                                        <img src="<%= related.featuredImage ? related.featuredImage.fileSrc : '/default-image.jpg' %>"
+                                                            class="img-fluid blur-up lazyload image-crop" alt="<%= related.name %>">
+                                                    </a>
+                                                
+                                                </div>
+                                            </div>
+                                            <div class="product-footer">
+                                                <div class="product-detail">
+                                                    <a href="/product/<%= related._id %>">
+                                                        <h5 class="name"><%= related.name %></h5>
+                                                    </a>
+                                                    <h5 class="price">
+                                                        <% if (related.variants && related.variants.length > 1) { %>
+                                                            <span class="theme-color">Starting from £<%= related.basePrice %></span>
+                                                        <% } else { %>
+                                                            <span class="theme-color">£<%= related.basePrice %></span>
+                                                        <% } %>
+                                                    </h5>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            <% } else { %>
+                                <div>
+                                    <p class="text-center">No related products found.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Related Product Section End -->
+
+  <style>
+    .image-crop {
+    width: 168.73px !important; /* Full width of container */
+    height: 128.4px !important; /* Fixed height */
+    object-fit: cover !important; /* Ensures image covers the area */
+    object-position: bottom !important; /* Focus on bottom of the image */
+}
+
+.product-image{
+    padding: 0px 0px 20px 0px !important;
+}
+.price{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+
+.slick-initialized.slick-slide{
+    height: 100% !important;
+}
+.product-box-3{
+    height: 245px !important;
+}
+  </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Script loaded and DOM fully loaded");
+
+    const variantSelectors = document.querySelectorAll('.variant-selector');
+    const priceElement = document.querySelector('#product-price');
+    const variantElement = document.querySelector('#variant-display');
+    const addToCartButton = document.querySelector('#add-to-cart');
+    const quantityInput = document.querySelector('.qty-input');
+
+    // Variant Selection Logic
+    variantSelectors.forEach(function(selector) {
+        selector.addEventListener('click', function() {
+            console.log('Variant clicked');
+
+            // Get the selected variant's details
+            const selectedPrice = this.getAttribute('data-price');
+            const selectedAttributes = this.getAttribute('data-attributes');
+
+            // Update the price display
+            if (priceElement) {
+                priceElement.textContent = selectedPrice + ' £';
+            }
+            if (variantElement) {
+                variantElement.textContent = selectedAttributes;
+            }
+
+            console.log('Selected Variant:', {
+                price: selectedPrice,
+                attributes: selectedAttributes
+            });
+        });
+    });
+
+    // Function to get selected variant index
+    function getSelectedVariantIndex() {
+        let selectedVariant = document.querySelector('.variant-selector:checked');
+        return selectedVariant ? 
+            Array.from(variantSelectors).indexOf(selectedVariant) : 
+            -1;
+    }
+
+    // Add to Cart functionality (Now sends an AJAX request to update the cart server-side)
+    if (addToCartButton) {
+        addToCartButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log("Add to Cart button clicked");
+
+            const productId = '<%= product._id %>';
+            const quantity = parseInt(quantityInput.value) || 1;
+            const variantIndex = getSelectedVariantIndex();
+
+            console.log(`Product ID: £{productId}, Quantity: £{quantity}, Variant Index: £{variantIndex}`);
+
+            // Prepare cart item object
+            const cartItem = {
+                productId: productId,
+                quantity: quantity,
+                hasVariants: <%= product.variants && product.variants.length > 1 %>,
+                variantIndex: variantIndex
+            };
+
+            console.log("Cart Item to add:", cartItem);
+
+            // Send AJAX request to update cart on server
+            fetch('/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cartItem)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Server response:", data);
+ 
+    window.location.href = "/cart"; // Redirect to cart page
+            })
+            .catch(error => {
+                console.error("Error adding to cart:", error);
+                alert('Failed to add product to cart. Please try again.');
+            });
+        });
+    }
+
+    // Quantity Controls
+   
+
+
+});
+
+    </script>

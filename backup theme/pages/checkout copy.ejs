@@ -1,0 +1,503 @@
+<script>
+    $(function () {
+        //validation for placeOrder
+        $('#billing-form').validate({
+            rules: {
+                firstName: {
+                    required: true
+                },
+                lastName: {
+                    required: true
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                mobileNo: {
+                    required: true,
+                    // phoneUS: true
+                },
+                addressLine1: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+                state: {
+                    required: true
+                },
+                zipCode: {
+                    required: true,
+                    // zipcodeUS: true
+                }
+            },
+            messages: {
+                firstName: 'Please enter your first name',
+                lastName: 'Please enter your last name',
+                email: 'Please enter a valid email address',
+                mobileNo: 'Please enter a valid phone number',
+                addressLine1: 'Please enter your address',
+                city: 'Please enter your city',
+                state: 'Please enter your state',
+                zipCode: 'Please enter a valid zip code'
+            },
+            // errorPlacement: function(error, element) {
+            //     console.log("ERROR: ",error)
+            //     console.log("element: ",element)
+            //     error.insertAfter(element);
+            // }
+        });
+        // Submit the form when the "Place Order" button is clicked
+        $('#place-order-button').click(function (event) {
+            event.preventDefault();
+            console.log("Button Clicked")
+            var payment = $('input[name=payment]:checked').val()
+            console.log("value of payment is:", payment)
+
+            if ($('#billing-form').valid()) {
+                console.log("Valid")
+                placeOrder(payment)
+            } else {
+                console.log("No Valid")
+            }
+
+        })
+
+        function placeOrder(payment) {
+            var formData = {
+                'firstName': $('input[name=firstName]').val(),
+                'lastName': $('input[name=lastName]').val(),
+                'email': $('input[name=email]').val(),
+                'mobileNo': $('input[name=mobileNo]').val(),
+                'addressLine1': $('input[name=addressLine1]').val(),
+                'addressLine2': $('input[name=addressLine2]').val(),
+                'country': $('select[name=country]').val(),
+                'city': $('input[name=city]').val(),
+                'state': $('input[name=state]').val(),
+                'zipCode': $('input[name=zipCode]').val(),
+                // 'createAccount': $('input[name=createAccount]').is(':checked'),
+                // 'shipToDifferentAddress': $('input[name=shipToDifferentAddress]').is(':checked'),
+                // 'shippingFirstName': $('input[name=shippingFirstName]').val(),
+                // 'shippingLastName': $('input[name=shippingLastName]').val(),
+                // 'shippingEmail': $('input[name=shippingEmail]').val(),
+                // 'shippingMobileNo': $('input[name=shippingMobileNo]').val(),
+                // 'shippingAddressLine1': $('input[name=shippingAddressLine1]').val(),
+                // 'shippingAddressLine2': $('input[name=shippingAddressLine2]').val(),
+                // 'shippingCountry': $('select[name=shippingCountry]').val(),
+                // 'shippingCity': $('input[name=shippingCity]').val(),
+                // 'shippingState': $('input[name=shippingState]').val(),
+                // 'shippingZipCode': $('input[name=shippingZipCode]').val(),
+                // 'payment': $('input[name=payment]:checked').val()
+            };
+            const subTotal = $('#subtotalprice').data("subtotal")
+            console.log("subtotalprice: ", subTotal)
+            const totalAmount = $('#totalPriceData').data("totalprice")
+            console.log("totalPrice: ", totalAmount)
+            var shippingFee = $('#shippingPrice').data("shippingfees");
+            console.log("shippingFee:", shippingFee);
+            formData = { ...formData, subTotal, totalAmount, shippingFee }
+            if (payment == 'cashOnDelivery') {
+                formData = { ...formData, paymentType: 'cash' }
+                console.log("Form Data dogg: ", formData)
+                simplePostOrder()
+            }
+            else if (payment == 'payWithCard') {
+                formData = { ...formData, paymentType: 'card' }
+                console.log("Form Data dog: ", formData)
+                postOrderForPaymentWithCard()
+            }
+            function simplePostOrder() {
+                $.ajax({
+                    url: '/placeOrder',
+                    method: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        console.log('response dog', response);
+                        toastr.success('Order places successfully');
+                        window.location.href = "/";
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.error(xhr.responseJSON.message);
+                    }
+                });
+            }
+            function postOrderForPaymentWithCard() {
+                $.ajax({
+                    url: '/placeOrderByPayWithCard',
+                    method: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        console.log('response', response);
+                        toastr.success('Order places successfully');
+                        window.location.href = `${response.url}`;
+                        // window.location.href = "/shop";
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.error(xhr.responseJSON.message);
+                    }
+                });
+            }
+        }
+        //on create account form validation
+        // $('#exampleModal form').validate({
+        $('#exampleModalform').validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true
+                },
+                phone: {
+                    required: true
+                },
+            },
+            messages: {
+                name: "Please enter your valid name",
+                email: "Please enter your valid email address",
+                password: "Please enter your valid password",
+                phone: "Please enter your valid phone",
+            }
+        });
+        //onSubmit button
+        $('.btnSubmitSignUp').click(function (event) {
+            event.preventDefault();
+            console.log("Button Clicked")
+            let formData = {
+                'name': $('input[name=name]').val(),
+                'email': $('input[name=email]').val(),
+                'password': $('input[name=password]').val(),
+                'phone': $('input[name=phone]').val(),
+            }
+            console.log('formData is ', formData)
+            // if ($('#exampleModal form').valid()) {
+            if ($('#exampleModalform').valid()) {
+                console.log('Yes, validated');
+                signUp()
+                // Perform further actions or submit the form
+            } else {
+                console.log('Not validated');
+            }
+        })
+        function signUp() {
+            let formData = {
+                'name': $('input[name=name]').val(),
+                'email': $('input[name=email]').val(),
+                'password': $('input[name=password]').val(),
+                'phone': $('input[name=phone]').val(),
+            }
+            console.log('formData is ', formData)
+            $.ajax({
+                url: '/signUp',
+                method: 'post',
+                data: formData,
+                success: function (response) {
+                    console.log('response', response)
+                    toastr.success('User registered successfully');
+                    setTimeout(function () {
+                        window.location.href = '/registration';
+                    }, 1000)
+                },
+                error: function (xhr, status, error) {
+                    toastr.error(xhr.responseJSON.message);
+                }
+            })
+        }
+
+    })
+
+</script>
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="#">Home</a>
+                <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                <span class="breadcrumb-item active">Checkout</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="exampleModalform" class="createAccountForm">
+                    <div class="form-group">
+                        <label for="userName" class="col-form-label">User Name:</label>
+                        <input type="text" name="name" class="form-control" placeholder="User name" id="userName">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-form-label">Email:</label>
+                        <input type="text" name="email" class="form-control" placeholder="Email" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-form-label">Password:</label>
+                        <input type="text" name="password" class="form-control" placeholder="Password" id="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="col-form-label">Phone:</label>
+                        <input type="text" name="phone" class="form-control" placeholder="Phone" id="phone">
+                    </div>
+                    <!-- <button class="btnSubmitSignUp">Sign up</button> -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btnSubmitSignUp">Submit
+                    Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Checkout Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-lg-8">
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing
+                    Address</span></h5>
+            <form id="billing-form">
+                <div class="bg-light p-30 mb-5">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>First Name</label>
+                            <input name="firstName" class="form-control" type="text" placeholder="John"
+                                value="<%- user && user.name %>">
+
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Last Name</label>
+                            <input name="lastName" class="form-control" type="text" placeholder="Doe">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>E-mail</label>
+                            <input name="email" class="form-control" type="email" placeholder="example@email.com"
+                                value="<%- user && user.email %>">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Mobile No</label>
+                            <input name="mobileNo" class="form-control" type="text" placeholder="+123 456 789"
+                                value="<%- user && user.phone %>">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Address Line 1</label>
+                            <input name="addressLine1" class="form-control" type="text" placeholder="123 Street">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Address Line 2</label>
+                            <input name="addressLine2" class="form-control" type="text" placeholder="123 Street">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Country</label>
+                            <select name="country" class="custom-select">
+                                <option selected>United States</option>
+                                <option>Afghanistan</option>
+                                <option>Albania</option>
+                                <option>Algeria</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>City</label>
+                            <input name="city" class="form-control" type="text" placeholder="New York">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>State</label>
+                            <input name="state" class="form-control" type="text" placeholder="New York">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>ZIP Code</label>
+                            <input name="zipCode" class="form-control" type="text" placeholder="123">
+                        </div>
+                        <% if (!user) { %>
+                            <div class="col-md-12 form-group">
+                                <!-- <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="newaccount">
+                                    <label class="custom-control-label" for="newaccount">Create an account</label>
+                                </div> -->
+                                <button type="button" id="create-account-button"
+                                    class="btn btn-block btn-primary font-weight-bold py-3" data-toggle="modal"
+                                    data-target="#exampleModal" data-whatever="@mdo">Create Account</button>
+
+
+                            </div>
+                            <% } %>
+                                <!-- <div class="col-md-12">
+                            <div class="custom-control custom-checkbox">
+                                <input name="shipToDifferentAddress" type="checkbox" class="custom-control-input"
+                                    id="shipto">
+                                <label class="custom-control-label" for="shipto" data-toggle="collapse"
+                                    data-target="#shipping-address">Ship to different address</label>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="collapse mb-5" id="shipping-address">
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span
+                            class="bg-secondary pr-3">Shipping Address</span></h5>
+                    <div class="bg-light p-30">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>First Name</label>
+                                <input name="shippingFirstName" class="form-control" type="text" placeholder="John">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Last Name</label>
+                                <input name="shippingLastName" class="form-control" type="text" placeholder="Doe">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>E-mail</label>
+                                <input name="shippingEmail" class="form-control" type="text"
+                                    placeholder="example@email.com">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Mobile No</label>
+                                <input name="shippingMobileNo" class="form-control" type="text"
+                                    placeholder="+123 456 789">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Address Line 1</label>
+                                <input name="shippingAddressLine1" class="form-control" type="text"
+                                    placeholder="123 Street">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Address Line 2</label>
+                                <input name="shippingAddressLine2" class="form-control" type="text"
+                                    placeholder="123 Street">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Country</label>
+                                <select name="shippingCountry" class="custom-select">
+                                    <option selected>United States</option>
+                                    <option>Afghanistan</option>
+                                    <option>Albania</option>
+                                    <option>Algeria</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>City</label>
+                                <input name="shippingCity" class="form-control" type="text" placeholder="New York">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>State</label>
+                                <input name="shippingState" class="form-control" type="text" placeholder="New York">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>ZIP Code</label>
+                                <input name="shippingZipCode" class="form-control" type="text" placeholder="123">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-4">
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order
+                    Total</span></h5>
+            <div class="bg-light p-30 mb-5">
+
+                <!-- mapping all products from add to cart to checkout using cookies -->
+                <% if (products) { let totalPrices=0; let count=0%>
+                    <div class="border-bottom">
+                        <h6 class="mb-3">Products</h6>
+                        <% for( let i=0; i < products.length; i++ ) { let product=products[i]; %>
+                            <% let name=product?.name %>
+                                <% let price=product?.price %>
+                                    <% let quantity=product?.quantity %>
+                                        <% let totalPrice=price * quantity %>
+                                            <% totalPrices=totalPrice + totalPrices%>
+                                                <div class="d-flex justify-content-between">
+                                                    <p>
+                                                        <%= name%>
+                                                    </p>
+                                                    <p>
+                                                        <%= quantity%> <i class="fas fa-times"></i>
+                                                            <%= price%>
+                                                    </p>
+                                                    <p>
+                                                        <%= totalPrice %>
+                                                    </p>
+                                                </div>
+                                                <% } %>
+                    </div>
+                    <div class="border-bottom pt-3 pb-2">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6>Subtotal</h6>
+                            <h6 id="subtotalprice" data-subtotal="<%- totalPrices %>">$<%= totalPrices %>
+                            </h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Shipping</h6>
+                            <h6 class="font-weight-medium" id="shippingPrice" data-shippingFees="10">$10</h6>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5>Total</h5>
+                            <h5 id="totalPriceData" data-totalprice="<%- totalPrices+10 %>">$<%= totalPrices+10 %>
+                            </h5>
+                        </div>
+                    </div>
+                    <% } else { %>
+                        <p>No product</p>
+                        <% }%>
+            </div>
+            <div class="mb-5">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span
+                        class="bg-secondary pr-3">Payment</span></h5>
+                <div class="bg-light p-30">
+                    <form id="paymentMethod">
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="payWithCard"
+                                    value="payWithCard">
+                                <label class="custom-control-label" for="payWithCard">Payment With Card</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="cashOnDelivery"
+                                    value="cashOnDelivery" checked>
+                                <label class="custom-control-label" for="cashOnDelivery">Cash on Delivery</label>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group mb-4">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
+                                <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
+                            </div>
+                        </div> -->
+                        <button id="place-order-button" class="btn btn-block btn-primary font-weight-bold py-3"
+                            type="submit">Place
+                            Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Checkout End -->
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+<style>
+    .error {
+        color: red;
+    }
+</style>

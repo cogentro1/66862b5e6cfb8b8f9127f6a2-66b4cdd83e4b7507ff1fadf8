@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fastkart">
+    <meta name="keywords" content="Fastkart">
+    <meta name="author" content="Fastkart">
+    <link rel="icon" href="/images/logo/1.png" type="image/x-icon">
+    <title>Krispy Cottage</title>
+    
+    <!-- Google font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+
+    <!-- bootstrap css -->
+    <link id="rtl-link" rel="stylesheet" type="text/css" href="/css/vendors/bootstrap.css">
+
+    <!-- wow css -->
+    <link rel="stylesheet" href="/css/animate.min.css">
+
+    <!-- Iconly css -->
+    <link rel="stylesheet" type="text/css" href="/css/bulk-style.css">
+
+    <!-- Template css -->
+    <link id="color-link" rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+    <%- include('./partials/navbar.ejs',{allCategories}) %>
+    <%- body %>
+    <%- include('./partials/footer.ejs') %>
+</body>
+
+</html>
+
+
+<style>
+    body{
+    overflow-x: hidden;
+}
+
+h1.poster-1{
+    color: white;
+}
+.home-contain .home-detail h1 .daily {
+    color: #ff0000;
+    font-weight: 800;
+}
+.home-contain .home-detail p{
+    color: white;
+}
+.home-contain .home-detail h6 {
+    color: red;
+}
+
+.home-contain .home-detail h6 span{
+    color:white;
+}
+
+.nav-item+.nav-item{
+    margin: 0px !important;
+}
+.navbar-nav{
+    gap: 2vw;
+}
+
+header .navbar.navbar-expand-xl .navbar-nav .nav-link::before
+{
+    display: none;
+}
+
+
+.category-box img {
+    width: 100%;  /* Ensure the image takes the full width of the container */
+    height: 100%; /* Ensure the image takes the full height of the container */
+    -o-object-fit: cover;
+    object-fit: cover; /* Make the image cover the entire container */
+    margin: 0 auto;
+}
+
+.category-box:hover img {
+    filter: none; /* Reset any filter effects */
+}
+
+.offer-box .offer-contain{
+    height: 100px !important;
+}
+body{
+    overflow-x: hidden;
+}
+
+h1.poster-1{
+    color: white;
+}
+.home-contain .home-detail h1 .daily {
+    color: #ff0000;
+    font-weight: 800;
+}
+.home-contain .home-detail p{
+    color: white;
+}
+.home-contain .home-detail h6 {
+    color: red;
+}
+
+.home-contain .home-detail h6 span{
+    color:white;
+}
+
+.nav-item+.nav-item{
+    margin: 0px !important;
+}
+.navbar-nav{
+    gap: 2vw;
+}
+
+header .navbar.navbar-expand-xl .navbar-nav .nav-link::before
+{
+    display: none;
+}
+
+
+.category-box img {
+    width: 100%;  /* Ensure the image takes the full width of the container */
+    height: 100%; /* Ensure the image takes the full height of the container */
+    -o-object-fit: cover;
+    object-fit: cover; /* Make the image cover the entire container */
+    margin: 0 auto;
+}
+
+.category-box:hover img {
+    filter: none; /* Reset any filter effects */
+}
+
+.offer-box .offer-contain{
+    height: 100px !important;
+}
+
+.home-contain .home-detail h5{
+color: white !important;
+}
+.home-contain .home-detail .shop-button{
+    color: white !important;
+}
+</style>

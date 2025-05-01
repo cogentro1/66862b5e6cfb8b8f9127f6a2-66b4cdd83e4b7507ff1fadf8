@@ -1,0 +1,333 @@
+
+
+
+    <!-- mobile fix menu start -->
+    
+    <div class="mobile-menu d-md-none d-block mobile-cart">
+        <ul>
+            <li class="active">
+                <a href="/">
+                    <i class="iconly-Home icli"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/cart">
+                    <i class="iconly-Bag-2 icli fly-cate"></i>
+                    <span>Cart</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- mobile fix menu end -->
+
+    <!-- Breadcrumb Section Start -->
+    <section class="breadcrumb-section pt-0">
+        <div class="container-fluid-lg">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-contain">
+                        <h2>Shop</h2>
+                        <nav>
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html">
+                                        <i class="fa-solid fa-house"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">Shop Category</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shop Section Start -->
+    <section class="section-b-space shop-section">
+        <div class="container-fluid-lg">
+            <div class="row">
+                <div class="col-custom-3">
+                    <div class="left-box wow fadeInUp">
+                        <div class="shop-left-sidebar">
+                            <ul class="nav nav-pills mb-3 custom-nav-tab" id="pills-tab" role="tablist">
+                                <% if (category) { %>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="pills-<%= category.slug %>" data-bs-toggle="pill"
+                                            data-bs-target="#pills-<%= category.slug %>" type="button" role="tab">
+                                            <%= category.name %>
+                                            <img src="/svg/1/food.svg" class="blur-up lazyload" alt="">
+                                        </button>
+                                    </li>
+                                <% } %>
+                            
+                                <% childCategories.forEach(child => { %>
+                                    <li class="nav-item" role="presentation">
+                                      <button class="nav-link <%= (category.slug === child.slug) ? 'active' : '' %>" 
+                                              data-category="<%= child.slug %>">
+                                        <%= child.name %>
+                                        <img src="/svg/1/food.svg" class="blur-up lazyload" alt="">
+                                      </button>
+                                    </li>
+                                  <% }) %>
+
+                              </ul>
+                              
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.querySelectorAll(".nav-link").forEach(button => {
+                      button.addEventListener("click", function() {
+                        const categorySlug = this.getAttribute("data-category");
+                        if (categorySlug) {
+                          window.location.href = "/category/" + categorySlug;
+                        }
+                      });
+                    });
+
+                    
+
+                    document.addEventListener('DOMContentLoaded', function() {
+    // Get all sorting dropdown items
+    const sortItems = document.querySelectorAll('.dropdown-item');
+    const productsContainer = document.querySelector('.product-list-section');
+
+    // Function to sort products
+    function sortProducts(criteria) {
+        // Convert NodeList to Array for easier manipulation
+        const productCards = Array.from(productsContainer.children);
+        
+        productCards.sort((a, b) => {
+            const nameA = a.querySelector('.name').textContent.trim();
+            const nameB = b.querySelector('.name').textContent.trim();
+            const priceA = parseFloat(a.querySelector('.price .theme-color').textContent.replace('£', ''));
+            const priceB = parseFloat(b.querySelector('.price .theme-color').textContent.replace('£', ''));
+
+            switch(criteria) {
+                case 'aToz':
+                    return nameA.localeCompare(nameB);
+                case 'zToa':
+                    return nameB.localeCompare(nameA);
+                case 'low':
+                    return priceA - priceB;
+                case 'high':
+                    return priceB - priceA;
+                default:
+                    return 0;
+            }
+        });
+
+        // Clear current products and re-append sorted products
+        productsContainer.innerHTML = '';
+        productCards.forEach(card => productsContainer.appendChild(card));
+    }
+
+    // Add click event listeners to sorting options
+    sortItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Update dropdown button text
+            const dropdownButton = document.querySelector('#dropdownMenuButton1 span');
+            dropdownButton.textContent = this.textContent;
+
+            // Sort based on the clicked item's ID
+            sortProducts(this.id);
+        });
+    });
+
+    // Set default sorting to A-Z
+    sortProducts('aToz');
+});
+                  </script>
+
+                <div class="col-custom-">
+                    <div class="show-button">
+                        <div class="filter-button d-inline-block d-lg-none">
+                            <a><i class="fa-solid fa-filter"></i> Filter Menu</a>
+                        </div>
+
+                        <div class="top-filter-menu">
+                            <div class="category-dropdown">
+                                <h5 class="text-content">Sort By :</h5>
+                                <div class="dropdown">
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                        data-bs-toggle="dropdown">
+                                        <span>A - Z Order</span> <i class="fa-solid fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                       
+                                        <li>
+                                            <a class="dropdown-item" id="low" href="javascript:void(0)">Low - High
+                                                Price</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="high" href="javascript:void(0)">High - Low
+                                                Price</a>
+                                        </li>
+                                      
+                                        <li>
+                                            <a class="dropdown-item" id="aToz" href="javascript:void(0)">A - Z Order</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="zToa" href="javascript:void(0)">Z - A Order</a>
+                                        </li>
+                                       
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="grid-option d-none d-md-block">
+                                <ul>
+                                    <li class="three-grid">
+                                        <a href="javascript:void(0)">
+                                            <img src="/svg/grid-3.svg" class="blur-up lazyload" alt="">
+                                        </a>
+                                    </li>
+                                    <li class="grid-btn d-xxl-inline-block d-none active">
+                                        <a href="javascript:void(0)">
+                                            <img src="/svg/grid-4.svg"
+                                                class="blur-up lazyload d-lg-inline-block d-none" alt="">
+                                            <img src="/svg/grid.svg"
+                                                class="blur-up lazyload img-fluid d-lg-none d-inline-block" alt="">
+                                        </a>
+                                    </li>
+                                    <li class="list-btn">
+                                        <a href="javascript:void(0)">
+                                            <img src="/svg/list.svg" class="blur-up lazyload" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div
+                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
+                        <% products.forEach(product => { %>
+                            <div>
+                                <div class="product-box-3 h-100 wow fadeInUp">
+                                    <div class="product-header">
+                                        <div class="product-image">
+                                            <a href="/product/<%= product._id %>">
+                                                <img src="<%= product.featuredImage ? product.featuredImage.fileSrc : '/images/default-product.png' %>" 
+                                                class="img-fluid blur-up lazyload image-crop" 
+                                                alt="<%= product.name %>">
+                                            </a>
+                        
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="product-footer">
+                                        <div class="product-detail">
+                                            <span class="span-name"><%= category.name %></span>
+                                            <a href="product-left-thumbnail.html">
+                                                <h5 class="name"><%= product.name %></h5>
+                                            </a>
+                                            <p class="text-content mt-1 mb-2 product-content"><%= product.shortDescription || '' %></p>
+                                            <div class="product-rating mt-2">
+                                                <ul class="rating">
+                                                    <li><i data-feather="star" class="fill"></i></li>
+                                                    <li><i data-feather="star" class="fill"></i></li>
+                                                    <li><i data-feather="star" class="fill"></i></li>
+                                                    <li><i data-feather="star" class="fill"></i></li>
+                                                    <li><i data-feather="star"></i></li>
+                                                </ul>
+                                                <span>(4.0)</span>
+                                            </div>
+                                            <h6 class="unit"></h6> <!-- No unit display -->
+                                            <h5 class="price">
+                                                <% if (product.variants && product.variants.length > 1) { %>
+                                                    <span class="theme-color">Starting from £<%= product.basePrice %></span>
+                                                <% } else { %>
+                                                    <span class="theme-color">£<%= product.basePrice %></span>
+                                                <% } %>
+                                            </h5>
+                                            <div class="add-to-cart-box bg-white">
+                                                <button class="btn btn-add-cart addcart-button">Add
+                                                  
+                                                </button>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                        
+
+                   
+                    </div>
+
+                    <nav class="custom-pagination">
+                        <ul class="pagination justify-content-center">
+                          <% if (pagination.hasPreviousPage) { %>
+                            <li class="page-item">
+                              <a class="page-link" href="?page=1">
+                                <i class="fa-solid fa-angles-left"></i>
+                              </a>
+                            </li>
+                            <li class="page-item">
+                              <a class="page-link" href="?page=<%= pagination.previousPage %>">
+                                <i class="fa-solid fa-angle-left"></i>
+                              </a>
+                            </li>
+                          <% } else { %>
+                            <li class="page-item disabled">
+                              <a class="page-link" href="javascript:void(0)" tabindex="-1">
+                                <i class="fa-solid fa-angles-left"></i>
+                              </a>
+                            </li>
+                          <% } %>
+                      
+                          <% for(let i = 1; i <= pagination.totalPages; i++) { %>
+                            <li class="page-item <%= i === pagination.currentPage ? 'active' : '' %>">
+                              <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                            </li>
+                          <% } %>
+                      
+                          <% if (pagination.hasNextPage) { %>
+                            <li class="page-item">
+                              <a class="page-link" href="?page=<%= pagination.nextPage %>">
+                                <i class="fa-solid fa-angle-right"></i>
+                              </a>
+                            </li>
+                            <li class="page-item">
+                              <a class="page-link" href="?page=<%= pagination.totalPages %>">
+                                <i class="fa-solid fa-angles-right"></i>
+                              </a>
+                            </li>
+                          <% } else { %>
+                            <li class="page-item disabled">
+                              <a class="page-link" href="javascript:void(0)">
+                                <i class="fa-solid fa-angles-right"></i>
+                              </a>
+                            </li>
+                          <% } %>
+                        </ul>
+                      </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+
+ <style>
+.image-crop {
+  width: 223.37px !important;
+  height: 123.25px !important;
+  object-fit: cover !important;  /* Ensures the image covers the entire area */
+  object-position: bottom !important;  /* Focuses on the bottom portion of the image */
+}
+.product-box-3 .product-header .product-image {
+    text-align: center;
+    padding:0px 0px 20px 0px !important;
+    display: block;
+}
+
+ </style>

@@ -1,0 +1,41 @@
+<section>
+    <div class="container-fluid-lg">
+        <div class="title">
+            <h2>Browse by Categories</h2>
+            <span class="title-leaf">
+                <svg class="icon-width">
+                    <use xlink:href="/svg/leaf.svg#leaf"></use>
+                </svg>
+            </span>
+            <p>Top Categories Of The Week</p>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="slider-9">
+                    <% categories.forEach(category => { %>
+                        <div>
+                            <a href="/category/<%= category.slug %>" class="category-box wow fadeInUp">
+                                <div>
+                                    <img src="<%= category.image ? category.image : '/svg/default-category.svg' %>" class="blur-up lazyload" alt="<%= category.name %>">
+                                    <h5><%= category.name %></h5>
+                                </div>
+                            </a>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+
+    .category-box img {
+        width: 146px !important;
+    height: 146px !important;
+    object-fit: cover !important;
+    object-position: bottom !important; /* Optional: for rounded corners */
+    border: 1px solid transparent;
+    border-radius: 10px;
+}
+</style>

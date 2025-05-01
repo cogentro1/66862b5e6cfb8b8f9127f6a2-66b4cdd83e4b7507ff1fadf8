@@ -1,0 +1,84 @@
+<section id="shop-products">
+    <div class="container-fluid-lg">
+      <div class="title">
+        <h2>Latest &amp; Products</h2>
+        <span class="title-leaf">
+          <svg class="icon-width">
+            <use xlink:href="/svg/leaf.svg#leaf"></use>
+          </svg>
+        </span>
+        
+      </div>
+      <div
+      class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
+      <% products.forEach(product => { %>
+          <div>
+              <div class="product-box-3 h-100 wow fadeInUp">
+                  <div class="product-header">
+                      <div class="product-image">
+                          <a href="/product/<%= product._id %>">
+                              <img src="<%= product.featuredImage ? product.featuredImage.fileSrc : '/images/default-product.png' %>" 
+                              class="img-fluid blur-up lazyload image-crop" 
+                              alt="<%= product.name %>">
+                          </a>
+      
+                      
+                      </div>
+                  </div>
+                  <div class="product-footer">
+                      <div class="product-detail">
+                    
+                          <a href="product-left-thumbnail.html">
+                              <h5 class="name"><%= product.name %></h5>
+                          </a>
+                          <p class="text-content mt-1 mb-2 product-content"><%= product.shortDescription || '' %></p>
+                          <div class="product-rating mt-2">
+                              <ul class="rating">
+                                  <li><i data-feather="star" class="fill"></i></li>
+                                  <li><i data-feather="star" class="fill"></i></li>
+                                  <li><i data-feather="star" class="fill"></i></li>
+                                  <li><i data-feather="star" class="fill"></i></li>
+                                  <li><i data-feather="star"></i></li>
+                              </ul>
+                              <span>(4.0)</span>
+                          </div>
+                          <h6 class="unit"></h6> <!-- No unit display -->
+                          <h5 class="price">
+                              <% if (product.variants && product.variants.length > 1) { %>
+                                  <span class="theme-color">Starting from £<%= product.basePrice %></span>
+                              <% } else { %>
+                                  <span class="theme-color">£<%= product.basePrice %></span>
+                              <% } %>
+                          </h5>
+                          <div class="add-to-cart-box bg-white">
+                              <button class="btn btn-add-cart addcart-button" onclick="location.href='/product/<%= product._id %>'">Add
+                                
+                              </button>
+                             
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      <% }); %>
+      
+
+ 
+  </div>
+    </div>
+  </section>
+
+  <style>
+    .image-crop {
+      width: 310.37px !important;
+      height: 123.25px !important;
+      object-fit: cover !important;  /* Ensures the image covers the entire area */
+      object-position: bottom !important;  /* Focuses on the bottom portion of the image */
+    }
+    .product-box-3 .product-header .product-image {
+        text-align: center;
+        padding:0px 0px 20px 0px !important;
+        display: block;
+    }
+    
+     </style>

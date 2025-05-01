@@ -1,0 +1,258 @@
+
+
+    <div class="mobile-menu d-md-none d-block mobile-cart">
+        <ul>
+            <li class="active">
+                <a href="/">
+                    <i class="iconly-Home icli"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+
+          
+            <li>
+                <a href="/cart">
+                    <i class="iconly-Bag-2 icli fly-cate"></i>
+                    <span>Cart</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- mobile fix menu end -->
+
+    <!-- Breadcrumb Section Start -->
+    <section class="breadcrumb-section pt-0">
+        <div class="container-fluid-lg">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-contain">
+                        <h2>Cart</h2>
+                        <nav>
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html">
+                                        <i class="fa-solid fa-house"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">Cart</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Cart Section Start -->
+<!-- Cart Section Start -->
+<section class="cart-section section-b-space">
+    <div class="container-fluid-lg">
+      <div class="row g-sm-5 g-3">
+        <div class="col-xxl-9">
+          <div class="cart-table">
+            <div class="table-responsive-xl">
+              <table class="table">
+                <tbody>
+                  <% console.log("Product List:", products); %>
+                  <% if (products && products.length > 0) { %>
+                    <% products.forEach(function(product) { %>
+                      <tr class="product-box-contain" 
+                      data-product-id="<%= product._id %>" 
+                      data-variant-index="<%= (product.variantIndex !== undefined && product.variantIndex !== null) ? product.variantIndex : 'default' %>">
+                        <td class="product-detail">
+                          <div class="product border-0">
+                            <a href="/product/<%= product._id %>" class="product-image">
+                              <img src="<%= product.featuredImage %>" class="img-fluid blur-up lazyload" alt="<%= product.name %>">
+                            </a>
+                            <div class="product-detail">
+                              <ul>
+                                <li class="name">
+                                  <a href="/product/<%= product._id %>"><%= product.name %> '' <%= product.variantIndex%></a>
+                                </li>
+                                
+                                <% if (product.hasVariants && product.attributes) { %>
+                                  <li class="text-content"><span class="text-title">Variant:</span> <%= product.attributes %></li>
+                                <% } %>
+                                
+                                <li class="text-content"><span class="text-title">Sold By:</span> Store</li>
+                                
+                                <li class="text-content"><span class="text-title">Quantity:</span> <%= product.quantity %></li>
+                                
+                                <li class="quantity-price-box">
+                                  <div class="cart_qty">
+                                    <div class="input-group">
+                                      <button type="button" class="btn qty-left-minus" data-type="minus" data-field="">
+                                        <i class="fa fa-minus ms-0"></i>
+                                      </button>
+                                      <input class="form-control input-number qty-input" type="text" name="quantity" value="<%= product.cartQuantity %>">
+                                      <button type="button" class="btn qty-right-plus" data-type="plus" data-field="">
+                                        <i class="fa fa-plus ms-0"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </li>
+                                
+                                <li>
+                                  <h5>Total: £<%= (product.price * product.cartQuantity).toFixed(2) %></h5>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </td>
+                        
+                        <td class="price">
+                          <h4 class="table-title text-content">Price</h4>
+                          <h6 class="theme-color">£<%= product.price.toFixed(2) %></h6>
+                        </td>
+                        
+                        <td class="quantity">
+                          <h4 class="table-title text-content">Qty</h4>
+                          <div class="quantity-price">
+                            <div class="cart_qty">
+                              <div class="input-group">
+                                <button type="button" class="btn qty-left-minus" data-type="minus" data-field="">
+                                  <i class="fa fa-minus ms-0"></i>
+                                </button>
+                                <input class="form-control input-number qty-input" id="product-quantity" type="text" name="quantity" value="<%= product.quantity %>">
+                                <button type="button" class="btn qty-right-plus" data-type="plus" data-field="">
+                                  <i class="fa fa-plus ms-0"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        
+                        <td class="subtotal">
+                          <h4 class="table-title text-content">Total</h4>
+                          <h5>£<%= (product.price * product.quantity).toFixed(2) %></h5>
+                        </td>
+                        
+                        <td class="save-remove">
+                          <h4 class="table-title text-content">Action</h4>
+                          <a class="remove close_button" href="javascript:void(0)" data-product-id="<%= product._id %>" data-variant-index="<%= product.variantIndex || 'default' %>">Remove</a>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="5" class="text-center">
+                        <div class="empty-cart-content p-4">
+                          <h3>Your cart is empty</h3>
+                          <p>Add some products to your cart to see them here!</p>
+                          <a href="/" class="btn btn-animation mt-3">Continue Shopping</a>
+                        </div>
+                      </td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+      
+      </div>
+    </div>
+  </section>
+
+  <div class="empty-cart-content p-4">
+    <
+    <a href="/checkout" class="btn btn-animation mt-3">Go to checkout</a>
+  </div>
+  <!-- Cart Section End -->
+    <!-- Cart Section End -->
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".qty-right-plus").forEach(button => {
+    button.addEventListener("click", function () {
+        console.log("Increase button clicked");
+        updateCartQuantity(this, 0);
+    });
+});
+
+// Decrease Quantity
+document.querySelectorAll(".qty-left-minus").forEach(button => {
+    button.addEventListener("click", function () {
+        console.log("Decrease button clicked");
+        updateCartQuantity(this, 0);
+    });
+});
+
+// Remove Item
+document.querySelectorAll(".remove").forEach(button => {
+    button.addEventListener("click", function () {
+        console.log("Remove button clicked");
+        removeFromCart(this);
+    });
+});
+
+
+    function updateCartQuantity(button, change) {
+    let row = button.closest(".product-box-contain");
+    let productId = row.getAttribute("data-product-id");
+    let variantIndex = row.getAttribute("data-variant-index");
+    let inputField = row.querySelector("#product-quantity");
+    console.log("Input field:", inputField);
+    let newQuantity = parseInt(inputField.value) + change;
+
+    console.log(`Updating quantity for Product ID: £{productId}, Variant Index: £{variantIndex}, New Quantity: £{newQuantity}`);
+
+    if (newQuantity < 1) {
+        console.warn("Quantity cannot be less than 1. Aborting update.");
+        return; // Prevents setting quantity below 1
+    }
+
+    fetch("/cart/update", {
+        method: "POST",  // Changed to POST
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, variantIndex: variantIndex || null, quantity: newQuantity })
+    })
+    .then(response => {
+        console.log("Response received from server:", response);
+        return response.json();
+    })
+    .then(data => {
+        console.log("Server response data:", data);
+        if (data.message === "Cart updated") {
+            inputField.value = newQuantity;
+            console.log("Quantity updated in input field");
+
+            if (data.cartItemTotal) {
+                let subtotalElement = row.querySelector(".subtotal h5");
+                if (subtotalElement) {
+                    subtotalElement.innerText = `££{data.cartItemTotal.toFixed(2)}`;
+                    console.log("Updated subtotal:", `££{data.cartItemTotal.toFixed(2)}`);
+                } else {
+                    console.warn("Subtotal element not found");
+                }
+            }
+        } else {
+            console.warn("Cart update failed:", data.message);
+        }
+    })
+    .catch(error => console.error("Error updating cart:", error));
+}
+
+
+    function removeFromCart(button) {
+        let row = button.closest(".product-box-contain");
+        let productId = row.getAttribute("data-product-id");
+        let variantIndex = row.getAttribute("data-variant-index");
+
+        fetch("/cart/delete", {
+            method: "DELETE",  // Changed to DELETE
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId, variantIndex: variantIndex || null })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Product removed from cart") {
+                row.remove(); // Remove item from UI
+            }
+        })
+        .catch(error => console.error("Error removing item:", error));
+    }
+});
+
+</script>

@@ -1,0 +1,103 @@
+<body>
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-12 d-flex justify-content-center align-items-center p-3">
+                <div class="shadow-lg bg-body-tertiary rounded col-md-5 col-sm-6 col-6 mt-4 p-3"
+                    style="margin-right: 5%;">
+                    <h5 style="display: inline; margin-left: 1%; ">Billing Address
+                    </h5>
+                    <hr>
+                    <p><%- order?.firstName %></p>
+                    <p> <%- order?.email %></p>
+                    <p style="display: inline;">
+                        <%- order?.country %>,<%- order?.city %>,<%- order?.state %>,<%- order?.zipCode %>
+                    </p>
+                    <p>
+                        <%- order?.addressLine1 %>,<%- order?.addressLine2 %>
+                    </p>
+
+                </div>
+                <div class=" shadow-lg bg-body-tertiary rounded col-md-5 col-sm-6 col-6 mt-4 p-3">
+                    <h5 style="display: inline; margin-left: 2%; ">Total Summary
+                    </h5>
+                    <hr>
+                    <p style="display: inline; margin-right: 50%;">Subtotal:</p>
+                    <p style="display: inline;">$<%- order?.subTotal %></p>
+                    <hr>
+                    <p style="display: inline; margin-right: 45%;"> Shipping Fee:</p>
+                    <p style="display: inline;">$<%- order?.shippingFee %></p>
+                    <hr>
+                    <p style="display: inline; margin-right: 43%;"> Total Amount:</p>
+                    <% if (order.totalAmount) { %>
+                        <p style="display: inline;">$<%- order?.totalAmount %></p>
+                        <% } else { %>
+                            <p style="display: inline;">$<%- order?.subTotal + order?.shippingFee %></p>
+
+                            <% }%>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Order Table Start -->
+            <% if (order) { %>
+                <div class="col-md-12 col-sm-12 col-12 d-flex justify-content-center align-items-center p-3">
+                    <div class="shadow-lg bg-body-tertiary rounded col-md-12 col-sm-12 col-12 mt-4 p-3">
+                        <h5 style="display: inline; margin-left: 2%; ">Order #1587203<%- order.reference %>
+                        </h5>
+
+                        <hr>
+                        <% for (let i=0; i < order?.products?.length; i++) { %>
+                            <div class="row">
+                                <div class="col-md-2" style="padding-left: 2%;">
+                                    <img src="<%- order?.products[i]?.product?.featuredImage?.fileSrc || 'https://altcabs.s3.eu-west-2.amazonaws.com/promptoo/b8a871b0-8449-11ee-ab5a-299beb6e5596hotel3.JPEG' %>" alt="Product Image" width="120" height="140">
+                                </div>
+                                <div class="col-md-2" style="padding-top: 5%;">
+                                    <%- order?.products[i]?.product?.name %>
+                                </div>
+                                <div class="col-md-2" style="padding-top: 5%;">
+                                    Qty: <%- order?.products[i]?.quantity %>
+                                </div>
+                                <div class="col-md-2" style="padding-top: 5%;">
+                                    Rs. <%= order?.products[i]?.quantity * order?.products[i]?.product?.price %>
+                                    Rs. <%console.log("order.products[i]",order?.products[i]) %>
+                                </div>
+                                <div class="col-md-2" style="padding-top: 5%;">
+                                    <span class="badge badge-danger p-3 rounded-pill" style="font-size: 20;">
+                                        <%= order?.order_status %>
+                                    </span>
+                                </div>
+                                <div class="col-md-2" style="padding-top: 5%;">
+                                    Dilivered on: 00:00:00
+                                </div>
+                            </div>
+                            <hr>
+                            <% } %>
+                                <button class="btn btn-primary viewOrderBtn" style="margin: 2%;"
+                                    onclick="location.href='/order'">Back To
+                                    Orders</button>
+                    </div>
+                </div>
+                <% } else { %>
+                    <div class="col-md-12 col-sm-12 col-12 d-flex justify-content-center align-items-center p-3">
+                        <div class="shadow-lg bg-body-tertiary rounded col-md-12 col-sm-12 col-12 mt-4 p-3">
+                            No data available
+                            <button class="btn btn-primary viewOrderBtn" style="margin: 2%;"
+                                onclick="location.href='/order'">Back To
+                                Orders</button>
+                        </div>
+
+                    </div>
+                    <% } %>
+
+        </div><!-- main div end -->
+    </div>
+</body>
+<script>
+    $(function () {
+        //for viewing one detailed ticket
+
+    });
+</script>

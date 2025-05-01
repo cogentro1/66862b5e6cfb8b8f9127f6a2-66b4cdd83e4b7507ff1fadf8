@@ -1,0 +1,181 @@
+<!-- Main Navbar -->
+<div class="container-fluid mb-30" style="background-color: #e21b70ff;">
+    <div class="row px-xl-12">
+        <div class="col-lg-12">
+            <nav class="navbar navbar-expand-lg navbar-dark py-3 py-lg-0 px-0"
+                style="background-color: #e21b70ff; justify-items: center !important; margin: 0 auto !important ;width: 100%;">
+                <a href="" class="text-decoration-none d-block d-lg-none">
+                    <span class="h1 text-uppercase text-dark bg-light px-2">Aqib</span>
+                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse"
+                    style="height:40px; justify-items: center !important;margin: 0 auto;width: 100%;">
+                    <div class="navbar-nav mr-auto py-0" style=" font-size: 1vw; width: 100%;">
+
+                        <% menuItems.forEach(item=> { %>
+                            <% if (!item.parentId) { %>
+                                <%= renderMenuItem(item, menuItems) %>
+                                    <% } %>
+                                        <% }); %>
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Main Navbar End -->
+
+<!-- Sub Navbar Start -->
+<div class="container-fluid mb-30" id="sub-navbar" style="background-color: #f8f9fa;">
+    <div class="row px-xl-5">
+        <div class="col-lg-12">
+            <nav class="navbar navbar-expand-lg navbar-light py-3 py-lg-0 px-0">
+                <div class="navbar-nav w-100" id="depth1-categories">
+                    <!-- Categories with depth 1 will be appended here -->
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Sub Navbar End -->
+
+<script>
+    $(function () {
+        // Function to populate categories with depth 1
+        function populateDepth1Categories(categories) {
+            const categoriesContainer = $('#depth1-categories');
+            categoriesContainer.empty(); // Clear any existing categories
+
+            categories.forEach(function (category) {
+                if (category.depth === 1) {
+                    categoriesContainer.append(
+                        `<a href="/categories/${category._id}" class="nav-item nav-link">${category.name}</a>`
+                    );
+                }
+            });
+        }
+
+        // Assuming categories is available in the global scope or passed from the server-side template
+        const categories = <% - JSON.stringify(categories) %>;
+        populateDepth1Categories(categories);
+    });
+
+    // jQuery to handle nested dropdowns
+    $(document).ready(function () {
+        $('.dropdown-submenu a.dropdown-item').on("click", function (e) {
+            $(this).next('div').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+        });
+    });
+</script>
+
+<style>
+    a {
+        font-size: 1vw !important;
+        white-space: nowrap;
+        /* Prevent line breaks */
+    }
+
+    .navbar.center .navbar-inner {
+        text-align: center !important;
+    }
+
+    .navbar.center .navbar-inner .nav {
+        display: inline-block !important;
+        float: none !;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap;
+        /* Prevent wrapping of nav items */
+        justify-content: center !important;
+        /* Center the nav items */
+    }
+
+    .nav-item,
+    .dropdown-item {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu>.dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+
+    .dropdown-submenu:hover>.dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+    }
+
+    .dropdown:hover>.dropdown-menu {
+        display: block;
+    }
+
+    .nav-item.dropdown .dropdown-menu {
+        white-space: nowrap;
+        /* Prevent line breaks in dropdown */
+    }
+
+    .navbar-collapse {
+        display: flex;
+        justify-content: center;
+        /* Center the navbar content */
+    }
+</style>
+
+<% function renderMenuItem(item, menuItems) { %>
+    <% const children=menuItems.filter(child=> child.parentId && child.parentId.toString() === item._id.toString()); %>
+        <% if (children.length> 0) { %>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="padding-bottom: 5px;">
+                    <%= item.title %> <i class="fa fa-angle-down mt-1"></i>
+                </a>
+                <div class="dropdown-menu rounded-0 border-0 m-0" style="background-color: #e21b70ff;">
+                    <% children.forEach(child=> { %>
+                        <%= renderSubMenuItem(child, menuItems) %>
+                            <% }); %>
+                </div>
+            </div>
+            <% } else { %>
+                <a href="<%= item.link %>" class="nav-item nav-link">
+                    <%= item.title %>
+                </a>
+                <% } %>
+                    <% } %>
+
+                        <% function renderSubMenuItem(item, menuItems) { %>
+                            <% const children=menuItems.filter(child=> child.parentId && child.parentId.toString() ===
+                                item._id.toString()); %>
+                                <% if (children.length> 0) { %>
+                                    <div class="dropdown-submenu">
+                                        <a href="<%= item.link %>" class="dropdown-item">
+                                            <%= item.title %>
+                                        </a>
+                                        <div class="dropdown-menu rounded-0 border-0 m-0"
+                                            style="background-color: #e21b70ff;">
+                                            <% children.forEach(child=> { %>
+                                                <%= renderSubMenuItem(child, menuItems) %>
+                                                    <% }); %>
+                                        </div>
+                                    </div>
+                                    <% } else { %>
+                                        <a href="<%= item.link %>" class="dropdown-item">
+                                            <%= item.title %>
+                                        </a>
+                                        <% } %>
+                                            <% } %>

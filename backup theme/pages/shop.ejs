@@ -1,0 +1,277 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="/">Home</a>
+                <a class="breadcrumb-item text-dark" href="/shop">Shop</a>
+                <span class="breadcrumb-item active">Shop List</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <!-- Shop Sidebar Start -->
+        <div class="col-lg-3 col-md-4">
+            <!-- Price Start -->
+            <div class="wrapper">
+                <header>
+                    <h2>Price Range</h2>
+                    <p>Use slider or enter min and max price</p>
+                </header>
+                <div class="price-input" style="display: flex; flex-direction: column;">
+                    <div class="field">
+                        <span style="margin-right: 3px;">Min</span>
+                        <input type="number" class="input-min" value="0" style="width: 97% !important;">
+                    </div>
+                    <div class="separator"> &nbsp;</div>
+                    <div class="field">
+                        <span>Max</span>
+                        <input type="number" class="input-max" value="1000">
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="progress"></div>
+                </div>
+                <div class="range-input">
+                    <input type="range" class="range-min" min="0" max="1000" value="0" step="10">
+                    <input type="range" class="range-max" min="0" max="1000" value="1000" step="10">
+                </div>
+                <button class="btn mt-3" id="apply-filter"
+                    style="background-color: #e21b70ff; color: white; width: 100%;">Apply Filter</button>
+            </div>
+        </div>
+        <!-- Shop Product Start -->
+        <div class="col-lg-9 col-md-8">
+            <div class="row pb-3">
+                <div class="col-12 pb-1 filters">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div>
+                            <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
+                        </div>
+                        <div class="ml-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle"
+                                    data-toggle="dropdown">Sorting</button>
+                                <div class="sorting dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item active" href="#">Latest</a>
+                                    <a class="dropdown-item" href="#">Popularity</a>
+                                    <a class="dropdown-item" href="#">Best Rating</a>
+                                </div>
+                            </div>
+                            <div class="btn-group ml-2">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle"
+                                    data-toggle="dropdown">Showing</button>
+                                <div class="showing dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item active" href="#">10</a>
+                                    <a class="dropdown-item" href="#">20</a>
+                                    <a class="dropdown-item" href="#">30</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Loop -->
+                <% products.forEach(product=> { %>
+                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1" style="position: relative;">
+                        <div class="product-item bg-light mb-4"
+                            style="border: 1px solid transparent; border-radius: 10px;">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="<%- product?.featuredImage?.fileSrc %>"
+                                    alt="<%= product.name %>"
+                                    style="border: 1px solid transparent; border-top-left-radius: 10px;border-top-right-radius: 10px;">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square view-product" href="#"
+                                        data-product-id="<%= product._id %>"><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-outline-dark btn-square add-to-cart" href="#" data-product-id="<%= product._id %>">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </a>
+
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="#">
+                                    <%= product.name %>
+                                </a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>$<%= product.price %>
+                                    </h5>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star mr-1" style="color: #e21b70ff;"></small>
+                                    <small class="fa fa-star mr-1" style="color: #e21b70ff;"></small>
+                                    <small class="fa fa-star mr-1" style="color: #e21b70ff;"></small>
+                                    <small class="fa fa-star mr-1" style="color: #e21b70ff;"></small>
+                                    <small class="fa fa-star mr-1" style="color: #e21b70ff;"></small>
+                                    <small>(99)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+
+            <!-- Pagination -->
+        </div>
+        <div style="margin: 0 auto;">
+            <ul class="pagination">
+                <li class="<%= currentPage === 1 ? 'disabled' : '' %>">
+                    <a
+                        href="<%= currentPage === 1 ? '#' : `?${typeof minPrice !== 'undefined' && typeof maxPrice !== 'undefined' ? `minPrice=${minPrice}&maxPrice=${maxPrice}&` : ''}page=${currentPage - 1}` %>">&lt;</a>
+                </li>
+                <% for (let i=1; i <=totalPages; i++) { %>
+                    <li class="<%= i === currentPage ? 'active' : '' %>">
+                        <a class="<%= i === currentPage ? 'active' : '' %>"
+                            href="?<% if (typeof minPrice !== 'undefined' && typeof maxPrice !== 'undefined') { %>minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %>&<% } %>page=<%= i %>">
+                            <%= i %>
+                        </a>
+                    </li>
+                    <% } %>
+                        <li class="<%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a
+                                href="<%= currentPage === totalPages ? '#' : `?${typeof minPrice !== 'undefined' && typeof maxPrice !== 'undefined' ? `minPrice=${minPrice}&maxPrice=${maxPrice}&` : ''}page=${currentPage + 1}` %>">&gt;</a>
+                        </li>
+            </ul>
+        </div>
+        <!-- Shop Product End -->
+    </div>
+</div>
+<!-- Shop End -->
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+<!-- JavaScript Code -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+////////////
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', async function (event) {
+            event.preventDefault();
+            const productId = this.getAttribute('data-product-id');
+            
+            try {
+                const response = await fetch(`/addToCart/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Show success message
+                    alert('Product added to cart successfully!');
+                    // You might want to update a cart counter in the UI here
+                } else {
+                    alert(data.message || 'Failed to add product to cart');
+                }
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                alert('An error occurred while adding the product to cart');
+            }
+        });
+    });
+
+        /////////
+        // Get all elements with the class 'view-product'
+        const viewProductButtons = document.querySelectorAll('.view-product');
+
+        // Add click event listener to each button
+        viewProductButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent default anchor behavior
+
+                // Get the product ID from the data attribute
+                const productId = this.getAttribute('data-product-id');
+
+                // Redirect to the product detail page
+                window.location.href = `/product/${productId}`;
+            });
+        });
+    });
+
+    const rangeInput = document.querySelectorAll(".range-input input"),
+        priceInput = document.querySelectorAll(".price-input input"),
+        range = document.querySelector(".slider .progress"),
+        slider = document.querySelector(".slider");
+
+    let priceGap = 10;
+
+    // Set initial values from URL parameters if available
+    const urlParams = new URLSearchParams(window.location.search);
+    const minPriceParam = urlParams.get('minPrice') || 0;
+    const maxPriceParam = urlParams.get('maxPrice') || 1000;
+
+    priceInput[0].value = minPriceParam;
+    priceInput[1].value = maxPriceParam;
+    rangeInput[0].value = minPriceParam;
+    rangeInput[1].value = maxPriceParam;
+    range.style.left = ((minPriceParam / rangeInput[0].max) * 100) + "%";
+    range.style.right = 100 - (maxPriceParam / rangeInput[1].max) * 100 + "%";
+
+    // Update the slider and inputs
+    function updatePriceInput() {
+        let minVal = parseInt(rangeInput[0].value),
+            maxVal = parseInt(rangeInput[1].value);
+
+        if (maxVal - minVal < priceGap) {
+            if (event.target.className === "range-min") {
+                rangeInput[0].value = maxVal - priceGap;
+            } else {
+                rangeInput[1].value = minVal + priceGap;
+            }
+        } else {
+            priceInput[0].value = minVal;
+            priceInput[1].value = maxVal;
+            range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
+            range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+        }
+    }
+
+    rangeInput.forEach(input => {
+        input.addEventListener("input", updatePriceInput);
+    });
+
+    priceInput.forEach(input => {
+        input.addEventListener("input", function () {
+            let minVal = parseInt(priceInput[0].value),
+                maxVal = parseInt(priceInput[1].value);
+
+            if ((maxVal - minVal >= priceGap) && maxVal <= rangeInput[1].max) {
+                if (input.className === "input-min") {
+                    rangeInput[0].value = minVal;
+                    range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
+                } else {
+                    rangeInput[1].value = maxVal;
+                    range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+                }
+            }
+        });
+    });
+
+    // Handle the apply filter button click
+    const applyFilterBtn = document.getElementById('apply-filter');
+    applyFilterBtn.addEventListener('click', function () {
+        const minPrice = priceInput[0].value;
+        const maxPrice = priceInput[1].value;
+        const currentUrl = window.location.href.split('?')[0]; // Get base URL without query params
+        const baseUrl = currentUrl.replace(/\/filter$/, ''); // Remove /filter if it exists at the end
+        window.location.href = `${baseUrl}/filter?minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    });
+</script>
+
+<style>
+    .product-action a {
+    margin: 0 3px;
+}
+</style>

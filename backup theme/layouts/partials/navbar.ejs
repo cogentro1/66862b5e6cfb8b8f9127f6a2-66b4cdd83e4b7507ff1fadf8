@@ -1,0 +1,190 @@
+<!-- Main Navbar -->
+<div class="container-fluid mb-30" style="background-color: #e21b70ff;">
+    <div class="row px-xl-12">
+        <div class="col-lg-12">
+            <nav class="navbar navbar-expand-lg navbar-dark py-3 py-lg-0 px-0"
+                style="background-color: #e21b70ff; justify-items: center !important; margin: 0 auto !important; width: 100%;">
+                <a href="" class="text-decoration-none d-block d-lg-none">
+                    <span class="h1 text-uppercase text-dark bg-light px-2">Aqib</span>
+                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse"
+                    style="height:40px; justify-items: center !important; margin: 0 auto; width: 100%;">
+                    <div class="navbar-nav mr-auto py-0" style=" width: 100%;">
+                        <%- helpers.render_menu(menus, 'primary-menu' , { dropdownItemClass: 'nav-item dropdown' ,
+                            navLinkClass: 'nav-link dropdown-toggle' ,
+                            dropdownMenuClass: 'dropdown-menu rounded-0 border-0 m-0' ,
+                            navItemClass: 'nav-item nav-link' , submenuClass: 'dropdown-submenu' ,
+                            submenuIconClass: 'fa fa-angle-right' , dropdownIconClass: 'fa fa-angle-down' ,
+                            submenuDropdownMenuClass: 'dropdown-menu rounded-0 border-0 m-0' }) %>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Main Navbar End -->
+
+<!-- Sub Navbar Start -->
+<div class="container-fluid mb-30" id="sub-navbar" style="background-color: #f8f9fa;">
+    <div class="row px-xl-5">
+        <div class="col-lg-12">
+            <nav class="navbar navbar-expand-lg navbar-light py-3 py-lg-0 px-0">
+                <div class="navbar-nav w-100" id="depth1-categories">
+                    <!-- Categories with depth 1 will be appended here -->
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Sub Navbar End -->
+
+<script>
+    $(function () {
+        function populateDepth1Categories(categories) {
+            const categoriesContainer = $('#depth1-categories');
+            categoriesContainer.empty(); // Clear any existing categories
+
+            categories.forEach(function (category) {
+                if (category.depth === 1) {
+                    categoriesContainer.append(
+                        `<a href="/categories/${category._id}" class="nav-item nav-link">${category.name.toUpperCase()}</a>`
+                    );
+                }
+            });
+        }
+
+        const categories = <% - JSON.stringify(categories) %>;
+        populateDepth1Categories(categories);
+    });
+
+    $(document).ready(function () {
+        $('.dropdown-submenu a.dropdown-item').on("click", function (e) {
+            $(this).next('div').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+        });
+    });
+</script>
+
+<style>
+    .navbar-dark .navbar-nav .nav-link {
+        font-size: 1vw !important;
+        padding: 0px 10px !important;
+        text-align: right !important;
+    }
+
+    a.nav-item.dropdown {
+        font-weight: 200 !important;
+        font-size: 0.95vw !important;
+        padding-left: 8px !important;
+        padding: 0.4vw !important;
+        padding-left: 1.6vw !important;
+    }
+
+    a.nav-item.dropdown:hover {
+        background-color: white !important;
+        color: #e21b70 !important;
+        text-decoration: none !important;
+        padding: 0.4vw !important;
+        padding-left: 1.6vw !important;
+    }
+
+    .navbar-collapse {
+        flex-grow: 0 !important;
+    }
+
+    .navbar.center .navbar-inner {
+        text-align: center !important;
+    }
+
+    .navbar.center .navbar-inner .nav {
+        display: inline-block !important;
+        float: none !important;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap;
+        justify-content: center !important;
+    }
+
+    .nav-item,
+    .dropdown-item {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu>.dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+
+    .dropdown-submenu:hover>.dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+    }
+
+    .dropdown:hover>.dropdown-menu {
+        display: block;
+    }
+
+    .nav-item.dropdown .dropdown-menu {
+        white-space: nowrap;
+    }
+
+    .navbar-collapse {
+        display: flex;
+        justify-content: center;
+    }
+
+    .dropdown-menu.rounded-0.border-0.m-0.show {
+        position: absolute !important;
+        background-color: #e21b70 !important;
+        width: 15vw !important;
+        padding: 0.8vw !important;
+        z-index: 999 !important;
+        /* Ensure dropdown stays on top */
+    }
+
+    .dropdown-menu.rounded-0.border-0.m-0 {
+        position: absolute !important;
+        background-color: #e21b70 !important;
+        width: 15vw !important;
+        padding: 0.8vw !important;
+        z-index: 999 !important;
+        /* Ensure dropdown stays on top */
+    }
+
+    .nav-item.dropdown {
+        display: flex !important;
+        justify-content: space-between !important;
+    }
+
+    .fa.fa-angle-right {
+        margin-top: 3px !important;
+    }
+
+    .nav-link.dropdown-toggle:hover {
+        color: white !important;
+    }
+
+    .nav-item.dropdown {
+        color: white;
+    }
+
+    .nav-item.dropdown:hover {
+        color: white !important;
+    }
+</style>

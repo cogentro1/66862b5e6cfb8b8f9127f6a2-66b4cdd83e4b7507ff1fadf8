@@ -1,0 +1,99 @@
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Order Table Start -->
+            <div class="col d-flex justify-content-center align-items-center">
+                <div class="theMostMainDiv">
+                    <div class="shadow-lg bg-body-tertiary rounded col-md-12 col-sm-12 col-12 mt-4">
+                        <div class="mainTicketTableDiv col-lg-12 col-md-12 col-sm-12 col-12">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile No</th>
+                                        <th>Country</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th>Zip-Code</th>
+                                        <th>Total Products</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (order.length>0) { %>
+                                        <% for( let index=0; index < order.length; index++ ) { %>
+                                            <tr>
+                                                <td>
+                                                    <% for( let i=0; i < order[index].products.length; i++ ) { %>
+                                                        <img src="<%- order[index].products[i].product.featuredImage %>"
+                                                            alt="Product Image" width="90" height="80">
+
+                                                        <% } %>
+                                                </td>
+                                                <td>
+                                                    <%- order[index].firstName %>
+                                                </td>
+                                                <td>
+                                                    <%- order[index].email %>
+                                                </td>
+                                                <td> <%- order[index].mobileNo %>
+                                                </td>
+                                                <td> <%- order[index].country %>
+                                                </td>
+                                                <td> <%- order[index].city %>
+                                                </td>
+                                                <td> <%- order[index].state %>
+                                                </td>
+                                                <td> <%- order[index].zipCode %>
+                                                </td>
+                                                <td> <%- order[index].products.length %>
+                                                </td>
+
+                                                <td>
+                                                    <button class="btn btn-primary viewOrderBtn"
+                                                        data-id="<%- order[index]._id%>">
+                                                        View
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td>No related data .....</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                            <!-- Order Table End -->
+                            <div class="loaderForTicket"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- main div end -->
+    </div>
+</body>
+<script>
+    $(function () {
+        //for viewing one detaild ticket
+        $(document).on('click', '.viewOrderBtn', function () {
+            const orderId = $(this).data('id')
+            console.log('order', orderId)
+            window.location.href = '/viewSingleOrder/' + orderId;
+        });
+        // function getSingleTicket(id) {
+        //     $.ajax({
+        //         url: '/getSingleTicket/' + id,
+        //         method: 'GET',
+        //         success: function (data) {
+        //             console.log('data', data)
+        //         },
+        //         error: function (xhr, status, error) {
+        //             console.log('error', error)
+        //         }
+        //     })
+        // }
+    });
+</script>

@@ -1,0 +1,172 @@
+<body>
+    <!-- model for editing the profile data -->
+    <% if (user) { %>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="exampleModalform" class="editProfileForm">
+                            <div class="form-group">
+                                <label for="userName" class="col-form-label">User Name:</label>
+                                <input type="text" name="name" class="form-control" placeholder="User name"
+                                    id="userName" value="<%- user && user.name %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-form-label">Email:</label>
+                                <input type="text" name="email" class="form-control" placeholder="Email" id="email"
+                                    value="<%- user && user.email %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" class="col-form-label">Phone:</label>
+                                <input type="text" name="phone" class="form-control" placeholder="Phone" id="phone"
+                                    value="<%- user && user.phone %>">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary saveProfileDataBtn" disabled>Submit
+                            Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Profile Table Start -->
+                    <div class="col d-flex justify-content-center align-items-center p-3">
+                        <div class="shadow-lg bg-body-tertiary rounded col-md-10 col-sm-12 col-12 mt-4 p-3 ">
+                            <div>
+                                <h4 style="margin-left: 1%; margin-top: 3%; margin-bottom: 3%; display: inline;">View
+                                    Profile
+                                </h4>
+                                <button type="button" id="edit-profile-button" class="btn btn-primary font-weight-bold"
+                                    style="margin-left: 75%;" data-toggle="modal" data-target="#exampleModal"
+                                    data-whatever="@mdo">
+                                    Edit Profile
+                                </button>
+                                <hr>
+                            </div>
+                            <div class="col-md-12 position-relative my-4">
+                                <div class="d-flex justify-content-center">
+                                </div>
+                                <div>
+                                    <h5> Name:</h5>
+                                    <p><%- user && user.name %></p>
+                                    <hr />
+                                </div>
+                                <div>
+                                    <h5> Email:</h5>
+                                    <p><%- user && user.email %></p>
+                                    <hr />
+                                </div>
+                                <div>
+                                    <h5> Password:</h5>
+                                    <p>**************</p>
+                                    <hr />
+                                </div>
+                                <div>
+                                    <h5> Phone Number:</h5>
+                                    <p><%- user && user.phone %></p>
+                                    <hr />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- main div end -->
+            </div>
+</body>
+<script>
+    $(function () {
+        // for viewing one detailed 
+        $(document).on('click', '.viewOrderBtn', function () {
+            const orderId = $(this).data('id');
+            console.log('order', orderId);
+            window.location.href = '/viewSingleOrder/' + orderId;
+        });
+        // Enabling button on change of any field
+        $('#userName, #email, #phone').on('input', function () {
+            $('.saveProfileDataBtn').prop('disabled', false);
+        });
+
+        // for edit profile and saving it 
+        $('#exampleModalform').validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                // password: {
+                //     required: true
+                // },
+                phone: {
+                    required: true
+                },
+            },
+            messages: {
+                name: "Please enter your valid name",
+                email: "Please enter your valid email address",
+                // password: "Please enter your valid password",
+                phone: "Please enter your valid phone",
+            }
+        });
+        //onSubmit button
+        $('.saveProfileDataBtn').click(function (event) {
+            event.preventDefault();
+            console.log("Button Clicked")
+            let formData = {
+                'name': $('input[name=name]').val(),
+                'email': $('input[name=email]').val(),
+                // 'password': $('input[name=password]').val(),
+                'phone': $('input[name=phone]').val(),
+            }
+            console.log('formData is ', formData)
+            // if ($('#exampleModal form').valid()) {
+            if ($('#exampleModalform').valid()) {
+                console.log('Yes, validated');
+                EditProfile()
+                // Perform further actions or submit the form
+            } else {
+                console.log('Not validated');
+            }
+        })
+        function EditProfile() {
+            let formData = {
+                'name': $('input[name=name]').val(),
+                'email': $('input[name=email]').val(),
+                // 'password': $('input[name=password]').val(),
+                'phone': $('input[name=phone]').val(),
+            }
+            console.log('formData is ', formData)
+            $.ajax({
+                url: '/editProfile',
+                method: 'put',
+                data: formData,
+                success: function (response) {
+                    console.log('response', response)
+                    toastr.success('Data Updated Successfully');
+                    window.location.reload()
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 404) {
+                        toastr.error(xhr.responseJSON.message); // Display the error message
+                    } else {
+                        toastr.error('Something went wrong');
+                    }
+                }
+            })
+        }
+
+    });
+</script>
